@@ -1,6 +1,8 @@
 ADG-Android_Drawable_Generator
 ==============================
 
+PS: Inclued xxhdpi and xxxhdpi generation
+
 This is a tool that allows for the automatic creation of drawables resources for the different screen densities in an Android  projects.  
 
 Dependencies:
@@ -13,7 +15,7 @@ Usage
 =====
     adg [file] [reference size] [--outname] [--outwidth]
     [--outheight] [--outdir] [--genoutdir] [--aspectratio] 
-    [--scaleoutside] [--ldpi] [--mdpi] [--hdpi] [--xhdpi] [--help]
+    [--scaleoutside] [--ldpi] [--mdpi] [--hdpi] [--xhdpi] [--xxhdpi] [--xxxhdpi] [--help]
 
 How scaling works
 =================
@@ -28,13 +30,13 @@ The options marked as [negatable] can accept a 'no' in front of it to negate it'
 Target selection
 ================
 
-By default, all the modified images will be created(ldpi, mdpi, hdpi, xhdpi), but you can also specify which image to create. By using --ldpi, --mdpi, --hdpi, --xhdpi you can specify which images to generate. If you specify any image size, then all the not specified will not be created.
+By default, all the modified images will be created(ldpi, mdpi, hdpi, xhdpi, xxhdpi, xxxhdpi), but you can also specify which image to create. By using --ldpi, --mdpi, --hdpi, --xhdpi, --xxhdpi, --xxxhdpi you can specify which images to generate. If you specify any image size, then all the not specified will not be created.
 
  * file: The file path to an image. Supported formats are the ones supported by ImageMagick(jpg, png, bmp and others)
 
  * reference size: The image will be scaled by comparing a square of dimensions sizeXsize. The image can be scaled by using either the longest or the shortest side. If this value is provided, then do not use --outwidth or --outheight. Reference --scaleoutside
 
- * --outname: The name of the output file. If --genoutdir is not set, then a modifier(ldpi, mdpi, hdpi or xhdpi) will be included between the file name and the extension.
+ * --outname: The name of the output file. If --genoutdir is not set, then a modifier(ldpi, mdpi, hdpi, xhdpi, xxhdpi or xxxhdpi) will be included between the file name and the extension.
 
  * --outwidth: The specific width for the shape used to set the scale. 
 
@@ -55,6 +57,10 @@ By default, all the modified images will be created(ldpi, mdpi, hdpi, xhdpi), bu
  * --hdpi: Generate the hdpi version of the image
 
  * --xhdpi: Generate the xhdpi version of the image
+
+ * --xxhdpi: Generate the xxhdpi version of the image
+
+ * --xxxhdpi: Generate the xxxhdpi version of the image
 
  * --help: Display this message
 

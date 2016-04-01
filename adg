@@ -75,6 +75,8 @@ my $createLDPI = '0';
 my $createMDPI = '0';
 my $createHDPI = '0';
 my $createXHDPI = '0';
+my $createXXHDPI = '0';
+my $createXXXHDPI = '0';
 
 my $help = '0';
 
@@ -100,12 +102,14 @@ GetOptions (	'outname=s'	=> \$outputFileName,
 		'ldpi'  	=> \$createLDPI,
 		'mdpi'  	=> \$createMDPI,
 		'hdpi' 		=> \$createHDPI,
-		'xhdpi'  	=> \$createXHDPI,
+    'xhdpi'   => \$createXHDPI,
+    'xxhdpi'   => \$createXXHDPI,
+		'xxxhdpi'  	=> \$createXXXHDPI,
 		'help' 		=> \$help);
 
 if($help)
 {
-  print "Usage adg [file] [referencesize size] [--outname name] [--outwidth size] [--outheight size] [--outdir path] [--genoutdir] [--aspectratio] [--scaleoutside] [--ldpi] [--mdpi] [--hdpi] [--xhdpi] [--help]\n";
+  print "Usage adg [file] [referencesize size] [--outname name] [--outwidth size] [--outheight size] [--outdir path] [--genoutdir] [--aspectratio] [--scaleoutside] [--ldpi] [--mdpi] [--hdpi] [--xhdpi] [--xxhdpi] [--xxxhdpi] [--help]\n";
   print "\n";
   print "A image will be scaled based on the size provided. This scaling will happen by generating a square using the dimensions provided and then fitting the image inside of it. By default the image will not be stretched and it will be scaled to fit inside the square. Some options can be used, such as --noaspectratio, to strech the image into the shape. Another important option is --scaleoutside, this option will scale the image to fill the square.\n";
   print "\n";
@@ -113,13 +117,13 @@ if($help)
   print "\n";
   print "The options marked as [negatable] can accept a 'no' in front of it to negate it's value. For example --nogenoutdir can be used to negate the effect of --genoutdir. Please check which options are negatable and what is their default value.\n";
   print "\n";
-  print "By default, all the modified images will be created(ldpi, mdpi, hdpi, xhdpi), but you can also specify which image to create. By using --ldpi, --mdpi, --hdpi, --xhdpi you can specify which images to generate. If you specify any image size, then all the not specified will not be created.\n";
+  print "By default, all the modified images will be created(ldpi, mdpi, hdpi, xhdpi, xxhdpi, xxxhdpi), but you can also specify which image to create. By using --ldpi, --mdpi, --hdpi, --xhdpi, --xxhdpi, --xxxhdpi you can specify which images to generate. If you specify any image size, then all the not specified will not be created.\n";
   print "\n";
   print "file: The file path to an image. Supported formats are the ones supported by ImageMagick(jpg, png, bmp and others)\n";
   print "\n";
   print "reference size: The image will be scaled by comparing a square of dimensions sizeXsize. The image can be scaled by using either the longest or the shortest side. If this value is provided, then do not use --outwidth or --outheight. Reference --scaleoutside\n";
   print "\n";
-  print "--outname: The name of the output file. If --genoutdir is not set, then a modifier(ldpi, mdpi, hdpi or xhdpi) will be included between the file name and the extension. If you are passing a folder as an argument, then this value will not take effect\n";
+  print "--outname: The name of the output file. If --genoutdir is not set, then a modifier(ldpi, mdpi, hdpi, xhdpi, xxhdpi or xxxhdpi) will be included between the file name and the extension. If you are passing a folder as an argument, then this value will not take effect\n";
   print "\n";
   print "--outwidth: The specific width for the shape used to set the scale. \n";
   print "\n";
@@ -140,6 +144,10 @@ if($help)
   print "--hdpi: Generate the hdpi version of the image\n"; 
   print "\n";
   print "--xhdpi: Generate the xhdpi version of the image\n"; 
+  print "\n";
+  print "--xxhdpi: Generate the xxhdpi version of the image\n"; 
+  print "\n";
+  print "--xxxhdpi: Generate the xxxhdpi version of the image\n"; 
   print "\n";
   print "--help: Display this message\n";
   exit;
@@ -247,12 +255,14 @@ print "Starting script\n";
 #All flags are set to false by default, if the user activates at least 
 #one flag  this change will be kept. If all flags are still false(no 
 #flag set by the user), then set all of them to true.
-if(!($createLDPI || $createMDPI || $createHDPI || $createXHDPI))
+if(!($createLDPI || $createMDPI || $createHDPI || $createXHDPI || $createXXHDPI || $createXXXHDPI))
 {
   $createLDPI = '1';
   $createMDPI = '1';
   $createHDPI = '1';
   $createXHDPI = '1';
+  $createXXHDPI = '1';
+  $createXXXHDPI = '1';
 }
 my @files;
 my $dir;
@@ -343,10 +353,40 @@ foreach (@files) {
   #and we will take action as required. If generateDirectory is
   #not set then $modFolder will be equal to '.'. If it is set, 
   #then $modFolder will be the respective folder with the modifier
-  #(ldpi, mdpi, hdpi, xhdpi).
+  #(ldpi, mdpi, hdpi, xhdpi, xxhdpi, xxxhdpi).
   my $outputFolder = '';
   my $mod = '';
  
+  if($createXXXHDPI)
+  {
+    $mod = 'xxxhdpi';
+    if($generateOutputDirectory)
+    {
+        $modFolderXXXH = "drawable-$mod";
+        make_path("$outputDirectoryName/$modFolderXXXH");
+    }
+    else
+    {
+      $outputFileName = "$filename-$mod$suffix";
+    }  
+    $outputFolder = "$outputDirectoryName/$modFolderXXXH";
+    resizeImage($image, $outputFileWidth * 4.0, $outputFileHeight * 4.0, $outputFolder, $outputFileName, $useAlpha, $keepAspectRatio);
+  }
+  if($createXXHDPI)
+  {
+    $mod = 'xxhdpi';
+    if($generateOutputDirectory)
+    {
+        $modFolderXXH = "drawable-$mod";
+        make_path("$outputDirectoryName/$modFolderXXH");
+    }
+    else
+    {
+      $outputFileName = "$filename-$mod$suffix";
+    }  
+    $outputFolder = "$outputDirectoryName/$modFolderXXH";
+    resizeImage($image, $outputFileWidth * 3.0, $outputFileHeight * 3.0, $outputFolder, $outputFileName, $useAlpha, $keepAspectRatio);
+  }
   if($createXHDPI)
   {
     $mod = 'xhdpi';
