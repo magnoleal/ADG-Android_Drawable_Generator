@@ -84,6 +84,8 @@ my $modFolderL = '.';
 my $modFolderM = '.';
 my $modFolderH = '.';
 my $modFolderXH = '.';
+my $modFolderXXH = '.';
+my $modFolderXXXH = '.';
 
 #Variable
 my $inputFileName = '';
